@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { PGlite, IdbFs } from '@electric-sql/pglite';
-import { live,PGliteWithLive } from '@electric-sql/pglite/live';
+import { live, PGliteWithLive } from '@electric-sql/pglite/live';
 import { PGliteProvider } from '@electric-sql/pglite-react';
 
 import Navigation from './components/Navigation';
-import PatientRegistrationForm from './components/PatientRegistration';
+import PatientRegistrationForm from './components/PatientRegistrationForm';
 import PatientList from './components/PatientList';
 
 import './styles/main.css';
 import ExecuteQuery from './components/ExecuteQuery';
-
 
 function App() {
   const [db, setDb] = useState<PGliteWithLive | null>(null);
@@ -69,7 +68,7 @@ function App() {
             <Routes>
               <Route path="/" element={<PatientRegistrationForm />} />
               <Route path="/patients" element={<PatientList />} />
-             <Route path='/query' element= {<ExecuteQuery/>}/>
+              <Route path="/query" element={<ExecuteQuery/>} />
             </Routes>
           </main>
         </div>
