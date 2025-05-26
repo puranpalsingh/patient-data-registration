@@ -10,6 +10,7 @@ import PatientRegistrationForm from './components/PatientRegistration';
 import PatientList from './components/PatientList';
 
 import './styles/main.css';
+import ExecuteQuery from './components/ExecuteQuery';
 
 
 function App() {
@@ -69,7 +70,7 @@ function App() {
             <Routes>
               <Route path="/" element={<PatientRegistrationForm />} />
               <Route path="/patients" element={<PatientList />} />
-             
+             <Route path='/query' element= {<ExecuteQuery/>}/>
             </Routes>
           </main>
         </div>
