@@ -1,14 +1,44 @@
 import React, { useEffect, useState } from 'react';
+import { usePGlite } from '@electric-sql/pglite-react';
 
-
-
+export interface PatientFormData {
+  id?: number;
+  firstname: string;
+  lastname: string;
+  dateofbirth: string;
+  email: string;
+  phone: string;
+  address?: string;
+  emergencyname: string;
+  emergencyphone: string;
+  allergies?: string;
+  medications?: string;
+}
 
 
 const PatientList: React.FC = () => {
-  
+  const db = usePGlite();
   const [patients, setPatients] = useState<PatientFormData[]>([]);
 
-  
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const results = await db.query(`SELECT * FROM Patients`);
+        if (results.rows) {
+          console.log('Fetched patients:', results.rows);
+          setPatients(results.rows as PatientFormData[]);
+        } else {
+          console.log('No patients fetched.');
+          setPatients([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch patients:', error);
+      }
+    };
+
+    fetchPatients();
+  }, [db]);
+
   return (
     <div className="patient-list">
       <h2 className="patient-list-title">Registered Patients</h2>

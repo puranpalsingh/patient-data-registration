@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle, AlertCircle } from 'lucide-react';
+import { usePGlite } from '@electric-sql/pglite-react';
 import type { PatientFormData } from '../types/patientTypes';
 
 const STORAGE_KEY = 'patientFormData';
 
 const PatientRegistrationForm: React.FC = () => {
+  const db = usePGlite();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<PatientFormData>(() => {
@@ -54,6 +56,39 @@ const PatientRegistrationForm: React.FC = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
+    }
+
+    try {
+      const result: any = await db.query(
+        `INSERT INTO Patients (
+          firstName, lastName, dateOfBirth, email, phone, address,
+          emergencyName, emergencyPhone, allergies, medications
+        ) VALUES (
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+        ) RETURNING id`,
+        [
+          formData.firstName,
+          formData.lastName,
+          formData.dateOfBirth,
+          formData.email,
+          formData.phone,
+          formData.address,
+          formData.emergencyName,
+          formData.emergencyPhone,
+          formData.allergies,
+          formData.medications
+        ]
+      );
+
+      console.log("Inserted patient id:", result.rows[0].id);
+
+      localStorage.removeItem(STORAGE_KEY);
+
+      setSubmitted(true);
+      setTimeout(() => navigate('/patients'), 2000);
+    } catch (error) {
+      console.error('Failed to submit form:', error);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
     }
   };
 
