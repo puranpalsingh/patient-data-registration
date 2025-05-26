@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { PGlite, IdbFs } from '@electric-sql/pglite';
-import { live } from '@electric-sql/pglite/live';
-import type { PGliteWithLive } from '@electric-sql/pglite/live';
+import { live,PGliteWithLive } from '@electric-sql/pglite/live';
 import { PGliteProvider } from '@electric-sql/pglite-react';
 
 import Navigation from './components/Navigation';
